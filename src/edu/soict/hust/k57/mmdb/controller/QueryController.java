@@ -5,7 +5,10 @@
  */
 package edu.soict.hust.k57.mmdb.controller;
 
+import edu.soict.hust.k57.mmdb.components.DistanceCaculable;
+import edu.soict.hust.k57.mmdb.components.EuclidCaculator;
 import edu.soict.hust.k57.mmdb.components.HistogramCaculator;
+import edu.soict.hust.k57.mmdb.exeptions.InvalidInputExeption;
 import edu.soict.hust.k57.mmdb.model.AbstractModel;
 import edu.soict.hust.k57.mmdb.model.QueryModel;
 import java.io.File;
@@ -31,6 +34,29 @@ public class QueryController extends AbstractController {
         for (AbstractModel model : models) {
             if (model instanceof QueryModel) {
                 ((QueryModel) model).setBin(bin, new HistogramCaculator());
+            }
+        }
+    }
+
+    public void queryHistogramChanelChanged() {
+        for (AbstractModel model : models) {
+            if (model instanceof QueryModel) {
+                ((QueryModel) model).changeSelectedChanel();
+            }
+        }
+    }
+
+    public void onClickSearchButton() throws InvalidInputExeption {
+        for (AbstractModel model : models) {
+            if (model instanceof QueryModel) {
+                DistanceCaculable distCalc = null;
+                QueryModel qModel = ((QueryModel) model);
+                switch (qModel.getDistanceType()){
+                    case EUCLID:
+                        distCalc = new EuclidCaculator();
+                        break;
+                }
+                qModel.search(new HistogramCaculator(), distCalc);
             }
         }
     }

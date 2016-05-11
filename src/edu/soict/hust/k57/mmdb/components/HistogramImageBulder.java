@@ -40,7 +40,7 @@ public class HistogramImageBulder {
         int hist_h = 100; // height of the histogram image
         int bin_w = (int) Math.round(hist_w * 1.0 / bin);
 
-        Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC3, new Scalar(0, 0, 0));
+        Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC3, new Scalar(80, 60, 60));
         Mat normalizeHist = hist.clone();
         Core.normalize(normalizeHist, normalizeHist, 0, histImage.rows(), Core.NORM_MINMAX, -1, new Mat());
 

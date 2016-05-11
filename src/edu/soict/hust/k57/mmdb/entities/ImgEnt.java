@@ -23,6 +23,11 @@ public class ImgEnt {
     public ImgEnt() {
         bin = 256;
     }
+    
+    public ImgEnt(File f){
+        this();
+        this.f = f;
+    }
 
     public File getF() {
         return f;

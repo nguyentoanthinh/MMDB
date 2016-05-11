@@ -7,6 +7,8 @@ package edu.soict.hust.k57.mmdb.view;
 
 import edu.soict.hust.k57.mmdb.controller.AbstractController;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -14,11 +16,15 @@ import javax.swing.JPanel;
  * @author thinhnt
  */
 public abstract class AbstractView extends JPanel{
-    protected AbstractController controller;
+    protected List<AbstractController> controllers;
+
+    public AbstractView() {
+        controllers = new ArrayList<>();
+    }
     
     public abstract void updateView(PropertyChangeEvent evt);
     
-    public void setController(AbstractController controller){
-        this.controller = controller;
+    public void addController(AbstractController controller){
+        this.controllers.add(controller);
     }
 }

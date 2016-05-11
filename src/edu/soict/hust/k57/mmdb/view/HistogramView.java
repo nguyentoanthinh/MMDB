@@ -6,7 +6,15 @@
 package edu.soict.hust.k57.mmdb.view;
 
 import edu.soict.hust.k57.mmdb.components.HistogramImageBulder;
+import edu.soict.hust.k57.mmdb.controller.AbstractController;
+import edu.soict.hust.k57.mmdb.controller.QueryController;
+import edu.soict.hust.k57.mmdb.controller.ResultController;
 import edu.soict.hust.k57.mmdb.entities.ImgEnt;
+import edu.soict.hust.k57.mmdb.model.IResultModel;
+import edu.soict.hust.k57.mmdb.model.QueryModel;
+import edu.soict.hust.k57.mmdb.model.ResultModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.ImageIcon;
 
@@ -24,6 +32,29 @@ public class HistogramView extends AbstractView {
     public HistogramView() {
         initComponents();
         queryHistogramImageBulder = new HistogramImageBulder();
+        queryHistogram.getChanelCombobox().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (AbstractController controller : controllers) {
+                    if (controller instanceof QueryController) {
+                        ((QueryController) controller).queryHistogramChanelChanged();
+                    }
+                }
+            }
+        });
+        
+        selectedHistogram.getChanelCombobox().addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (AbstractController controller : controllers) {
+                    if (controller instanceof ResultController) {
+                        ((ResultController) controller).selectedHistogramChanelChanged();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -72,19 +103,31 @@ public class HistogramView extends AbstractView {
 
     @Override
     public void updateView(PropertyChangeEvent evt) {
-        System.out.println("Update.Histogram.View");
-
+//        System.out.println("Update.Histogram.View");
         // Update for query input change
-        ImgEnt queryImgEnt = (ImgEnt) evt.getNewValue();
-        queryHistogramImageBulder.createHistogramImages(queryImgEnt);
-        ImageIcon imageIcon = null;
-        if (queryHistogram.getChanelCombobox().getSelectedItem().equals("B")) {
-            imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.B);
-        } else if (queryHistogram.getChanelCombobox().getSelectedItem().equals("G")) {
-            imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.G);
-        } else {
-            imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.R);
+        if (evt.getPropertyName().equals(QueryModel.CHANEL_PROPERTY_NAME) || evt.getPropertyName().equals(QueryModel.IMG_PROPERTY_NAME)) {
+            ImgEnt queryImgEnt = (ImgEnt) evt.getNewValue();
+            queryHistogramImageBulder.createHistogramImages(queryImgEnt);
+            ImageIcon imageIcon = null;
+            if (queryHistogram.getChanelCombobox().getSelectedItem().equals("B")) {
+                imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.B);
+            } else if (queryHistogram.getChanelCombobox().getSelectedItem().equals("G")) {
+                imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.G);
+            } else {
+                imageIcon = queryHistogramImageBulder.getImageIcon(HistogramImageBulder.Channel.R);
+            }
+            queryHistogram.setImage(imageIcon);
+        }else if (evt.getPropertyName().equals(ResultModel.SELECTED_IMAGE_PROPERTY_NAME) || evt.getPropertyName().equals(ResultModel.CHANEL_PROPERTY_NAME)){
+            IResultModel model = (IResultModel) evt.getNewValue();
+            ImageIcon imageIcon = null;
+            if (selectedHistogram.getChanelCombobox().getSelectedItem().equals("B")) {
+                imageIcon = model.getBHistogramImageIcon();
+            } else if (selectedHistogram.getChanelCombobox().getSelectedItem().equals("G")) {
+                imageIcon = model.getGHistogramImageIcon();
+            } else {
+                imageIcon = model.getRHistogramImageIcon();
+            }
+            selectedHistogram.setImage(imageIcon);
         }
-        queryHistogram.setImage(imageIcon);
     }
 }

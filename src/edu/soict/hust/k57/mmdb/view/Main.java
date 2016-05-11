@@ -5,8 +5,11 @@
  */
 package edu.soict.hust.k57.mmdb.view;
 
+import edu.soict.hust.k57.mmdb.components.Context;
 import edu.soict.hust.k57.mmdb.controller.QueryController;
+import edu.soict.hust.k57.mmdb.controller.ResultController;
 import edu.soict.hust.k57.mmdb.model.QueryModel;
+import edu.soict.hust.k57.mmdb.model.ResultModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -25,8 +28,18 @@ public class Main extends javax.swing.JFrame {
         QueryController queryController= new QueryController();
         queryController.addModel(queryModel);
         queryController.addView(queryView);
+        queryView.addController(queryController);
         queryController.addView(histogramView);
-        queryView.setController(queryController);
+        histogramView.addController(queryController);
+        
+        ResultModel resultModel = new ResultModel();
+        ResultController resultController = new ResultController();
+        resultController.addView(resultView);
+        resultController.addView(histogramView);
+        resultController.addModel(resultModel);
+        resultView.addController(resultController);
+        histogramView.addController(resultController);
+        Context.sharedInstance().addPropertyChangeListener(resultModel);
     }
 
     /**

@@ -5,20 +5,24 @@
  */
 package edu.soict.hust.k57.mmdb.view;
 
+import edu.soict.hust.k57.mmdb.controller.AbstractController;
 import edu.soict.hust.k57.mmdb.controller.QueryController;
 import edu.soict.hust.k57.mmdb.entities.ImgEnt;
+import edu.soict.hust.k57.mmdb.exeptions.InvalidInputExeption;
+import edu.soict.hust.k57.mmdb.model.QueryModel;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author thinhnt
  */
 public class QueryView extends AbstractView {
-
-    private File selectedFile;
 
     /**
      * Creates new form QueryView
@@ -75,6 +79,11 @@ public class QueryView extends AbstractView {
         });
 
         searchButton.setText("Tìm kiếm");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -134,19 +143,44 @@ public class QueryView extends AbstractView {
         JFileChooser chooser = new JFileChooser(new File(System.getProperty("user.dir")));
         int value = chooser.showOpenDialog(this);
         if (value == JFileChooser.APPROVE_OPTION) {
-            selectedFile = chooser.getSelectedFile();
-            ((QueryController) controller).changeInputFile(selectedFile);
+            File selectedFile = chooser.getSelectedFile();
+            for (AbstractController controller : controllers) {
+                if (controller instanceof QueryController) {
+                    ((QueryController) controller).changeInputFile(selectedFile);
+                }
+            }
         }
     }//GEN-LAST:event_chooseFileButtonActionPerformed
 
     private void numOfBinCbbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numOfBinCbbActionPerformed
-        ((QueryController) controller).changeBin(
-                Integer.parseInt(numOfBinCbb.getSelectedItem().toString()));
+        for (AbstractController controller : controllers) {
+            if (controller instanceof QueryController) {
+                ((QueryController) controller).changeBin(
+                        Integer.parseInt(numOfBinCbb.getSelectedItem().toString()));
+            }
+        }
     }//GEN-LAST:event_numOfBinCbbActionPerformed
 
     private void distanceCbbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_distanceCbbActionPerformed
-        ((QueryController) controller).changeDistanceType(distanceCbb.getSelectedItem().toString());
+        for (AbstractController controller : controllers) {
+            if (controller instanceof QueryController) {
+                ((QueryController) controller).changeDistanceType(distanceCbb.getSelectedItem().toString());
+            }
+        }
     }//GEN-LAST:event_distanceCbbActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        for (AbstractController controller : controllers) {
+            if (controller instanceof QueryController) {
+                try {
+                    ((QueryController) controller).onClickSearchButton();
+                } catch (InvalidInputExeption ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -162,9 +196,11 @@ public class QueryView extends AbstractView {
 
     @Override
     public void updateView(PropertyChangeEvent evt) {
-        System.out.println("Update.Query.View");
-        ImgEnt queryImgEnt = (ImgEnt) evt.getNewValue();
-        imagePanel.setImage(new ImageIcon(queryImgEnt.getF().getPath()));
-        imagePanel.setImageName(queryImgEnt.getF().getName());
+//        System.out.println("Update.Query.View");
+        if (evt.getPropertyName().equals(QueryModel.IMG_PROPERTY_NAME)) {
+            ImgEnt queryImgEnt = (ImgEnt) evt.getNewValue();
+            imagePanel.setImage(new ImageIcon(queryImgEnt.getF().getPath()));
+            imagePanel.setImageName(queryImgEnt.getF().getName());
+        }
     }
 }
