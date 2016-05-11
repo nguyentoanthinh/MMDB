@@ -5,7 +5,9 @@
  */
 package edu.soict.hust.k57.mmdb.view;
 
+import java.awt.Color;
 import java.awt.Image;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -15,6 +17,8 @@ import javax.swing.JPanel;
  */
 public class ResultImagePanel extends JPanel {
 
+    private boolean selected = false;
+    
     /**
      * Creates new form NewJPanel
      */
@@ -41,6 +45,30 @@ public class ResultImagePanel extends JPanel {
         int h = img.getIconHeight();
         image = image.getScaledInstance(w * 100 / h, 100, Image.SCALE_SMOOTH);
         return new ImageIcon(image);
+    }
+
+    public void enableSelectedEffect(){
+        imageLabel.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+        distanceLabel.setForeground(Color.GREEN);
+        imgNameLabel.setForeground(Color.GREEN);
+    }
+    
+    public void disableSelectedEffect(){
+        imageLabel.setBorder(BorderFactory.createEmptyBorder());
+        distanceLabel.setForeground(Color.BLACK);
+        imgNameLabel.setForeground(Color.BLACK);
+    }
+    
+    public boolean isEmpty(){
+        return "".equals(imgNameLabel.getText());
+    }
+    
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+    
+    public boolean isSelected(){
+        return selected;
     }
     
     /**

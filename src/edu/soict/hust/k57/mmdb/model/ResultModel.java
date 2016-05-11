@@ -24,7 +24,8 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
     private final static int COL = 5;
     private ImgEnt[] imgEntResult;
     private HistogramImageBulder buiBulder;
-    private int selectedImage = 0;
+    private int oldselectedIndex;
+    private int selectedIndex = 0;
 
     public ResultModel() {
         buiBulder = new HistogramImageBulder();
@@ -63,11 +64,22 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
     public ImageIcon getBHistogramImageIcon() {
         return buiBulder.getImageIcon(HistogramImageBulder.Channel.B);
     }
+    
+    @Override
+    public int getOldSelectedIndex() {
+        return oldselectedIndex;
+    }
+    
+    @Override
+    public int getNewSelectedIndex() {
+        return selectedIndex;
+    }
 
     @Override
     public void setSelectedImage(int i, int j) {
-        selectedImage = COL * i + j;
-        buiBulder.createHistogramImages(imgEntResult[selectedImage]);
+        oldselectedIndex = selectedIndex;
+        selectedIndex = COL * i + j;
+        buiBulder.createHistogramImages(imgEntResult[selectedIndex]);
         support.firePropertyChange(SELECTED_IMAGE_PROPERTY_NAME, null, this);
     }
 
@@ -76,7 +88,6 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
         if (evt.getPropertyName().equals(Context.RESULT_PROPERTY_NAME)) {
             imgEntResult = (ImgEnt[]) evt.getNewValue();
             support.firePropertyChange(RESULT_PROPERTY_NAME, null, this);
-            setSelectedImage(0, 0);
         }
     }
 

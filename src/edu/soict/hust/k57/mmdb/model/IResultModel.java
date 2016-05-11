@@ -30,6 +30,11 @@ public interface IResultModel {
     // Get Blue Histogram Icon of selected image
     ImageIcon getBHistogramImageIcon();
     
+    // get the index of previous image
+    int getOldSelectedIndex();
+    
+    // get the index of selected image
+    int getNewSelectedIndex();
     
     //  Set specified image to selected image
     void setSelectedImage(int i, int j);

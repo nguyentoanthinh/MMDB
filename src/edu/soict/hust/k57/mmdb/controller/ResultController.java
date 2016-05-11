@@ -25,4 +25,11 @@ public class ResultController extends AbstractController{
         }
     }
     
+    public void onSelectedImaage(int i, int j){
+         for (AbstractModel model : models) {
+            if (model instanceof ResultModel) {
+                ((ResultModel) model).setSelectedImage(i, j);
+            }
+        }
+    }
 }
