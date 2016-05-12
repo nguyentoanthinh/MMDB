@@ -21,6 +21,10 @@ public interface IResultModel {
     // Get Icon of specified image
     ImageIcon getImageIcon(int i, int j);
     
+    String getSelectedImageName();
+    
+    ImageIcon getSelectedImageIcon();
+    
     // Get Red Histogram Icon of selected image
     ImageIcon getRHistogramImageIcon();
     
@@ -38,4 +42,6 @@ public interface IResultModel {
     
     //  Set specified image to selected image
     void setSelectedImage(int i, int j);
+    
+    void setSelectedIndex(int i);
 }

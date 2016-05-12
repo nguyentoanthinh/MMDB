@@ -5,15 +5,15 @@
  */
 package edu.soict.hust.k57.mmdb.view;
 
+import edu.soict.hust.k57.mmdb.components.Context;
 import edu.soict.hust.k57.mmdb.controller.AbstractController;
 import edu.soict.hust.k57.mmdb.controller.QueryController;
 import edu.soict.hust.k57.mmdb.entities.ImgEnt;
 import edu.soict.hust.k57.mmdb.exeptions.InvalidInputExeption;
 import edu.soict.hust.k57.mmdb.model.QueryModel;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -22,13 +22,17 @@ import javax.swing.JOptionPane;
  *
  * @author thinhnt
  */
-public class QueryView extends AbstractView {
+public class QueryView extends AbstractView implements PropertyChangeListener{
+
+    public final static String EUCLID_DISTANCE = "Euclid";
+    public final static String C_DISTANCE = "Cosin Distance";
 
     /**
      * Creates new form QueryView
      */
     public QueryView() {
         initComponents();
+        Context.sharedInstance().addPropertyChangeListener(this);
     }
 
     /**
@@ -71,7 +75,7 @@ public class QueryView extends AbstractView {
 
         jLabel3.setText("Hàm khoản cách:");
 
-        distanceCbb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Euclid" }));
+        distanceCbb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { EUCLID_DISTANCE, C_DISTANCE }));
         distanceCbb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 distanceCbbActionPerformed(evt);
@@ -172,6 +176,8 @@ public class QueryView extends AbstractView {
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         for (AbstractController controller : controllers) {
             if (controller instanceof QueryController) {
+                searchButton.setEnabled(false);
+                MMDBProgress.sharedInstace().start();
                 try {
                     ((QueryController) controller).onClickSearchButton();
                 } catch (InvalidInputExeption ex) {
@@ -202,5 +208,11 @@ public class QueryView extends AbstractView {
             imagePanel.setImage(new ImageIcon(queryImgEnt.getF().getPath()));
             imagePanel.setImageName(queryImgEnt.getF().getName());
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        MMDBProgress.sharedInstace().stop();
+        searchButton.setEnabled(true);
     }
 }

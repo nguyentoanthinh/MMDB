@@ -64,7 +64,20 @@ public class ResultView extends AbstractView {
                         if (!p.isEmpty()) {
                             for (AbstractController controller : controllers) {
                                 if (controller instanceof ResultController) {
-                                    ((ResultController) controller).onSelectedImaage(ii, jj);
+                                    ((ResultController) controller).onSelectedImage(ii, jj);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e); //To change body of generated methods, choose Tools | Templates.
+                        int count = e.getClickCount();
+                        if (count == 2 && !p.isEmpty()) {
+                            for (AbstractController controller : controllers) {
+                                if (controller instanceof ResultController) {
+                                    ((ResultController) controller).onDoubleClickedImage(ii, jj);
                                 }
                             }
                         }

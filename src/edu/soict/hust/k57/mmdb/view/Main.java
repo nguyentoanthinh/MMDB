@@ -40,6 +40,11 @@ public class Main extends javax.swing.JFrame {
         resultView.addController(resultController);
         histogramView.addController(resultController);
         Context.sharedInstance().addPropertyChangeListener(resultModel);
+        
+        ImageView imageView = new ImageView();
+        resultController.addView(imageView);
+        imageView.addController(resultController);
+        ImageViewer.sharedInstance().setContentPane(imageView);
     }
 
     /**

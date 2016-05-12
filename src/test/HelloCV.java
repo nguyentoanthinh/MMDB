@@ -5,6 +5,7 @@
  */
 package test;
 
+import edu.soict.hust.k57.mmdb.view.MMDBProgress;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;

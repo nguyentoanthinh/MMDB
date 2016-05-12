@@ -144,6 +144,6 @@ public class QueryModel extends AbstractModel {
     }
 
     public enum DistanceType {
-        EUCLID
+        EUCLID, COSIN_DISTANCE
     }
 }

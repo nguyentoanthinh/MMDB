@@ -30,8 +30,8 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
     public ResultModel() {
         buiBulder = new HistogramImageBulder();
     }
-    
-    public void changeSelectedChanel(){
+
+    public void changeSelectedChanel() {
         support.firePropertyChange(CHANEL_PROPERTY_NAME, null, this);
     }
 
@@ -64,15 +64,33 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
     public ImageIcon getBHistogramImageIcon() {
         return buiBulder.getImageIcon(HistogramImageBulder.Channel.B);
     }
-    
+
     @Override
     public int getOldSelectedIndex() {
         return oldselectedIndex;
     }
-    
+
     @Override
     public int getNewSelectedIndex() {
         return selectedIndex;
+    }
+    
+     @Override
+    public void setSelectedIndex(int i) {
+        oldselectedIndex = selectedIndex;
+        selectedIndex = i;
+        buiBulder.createHistogramImages(imgEntResult[selectedIndex]);
+        support.firePropertyChange(SELECTED_IMAGE_PROPERTY_NAME, null, this);
+    }
+
+    @Override
+    public String getSelectedImageName() {
+        return imgEntResult[selectedIndex].getF().getName();
+    }
+
+    @Override
+    public ImageIcon getSelectedImageIcon() {
+        return new ImageIcon(imgEntResult[selectedIndex].getF().getPath());
     }
 
     @Override
@@ -90,5 +108,4 @@ public class ResultModel extends AbstractModel implements IResultModel, Property
             support.firePropertyChange(RESULT_PROPERTY_NAME, null, this);
         }
     }
-
 }
