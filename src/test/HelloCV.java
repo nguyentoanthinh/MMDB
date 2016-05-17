@@ -50,7 +50,6 @@ public class HelloCV extends JFrame {
 
         Mat hist = new Mat();
         Imgproc.calcHist(images.subList(0, 1), channels, new Mat(), hist, histSize, histRange, false);
-//        System.out.println(hist.dump());
         // Show histogram
         int hist_w = 150; // width of the histogram image
         int hist_h = 100; // height of the histogram image
@@ -58,8 +57,10 @@ public class HelloCV extends JFrame {
         int bin_w = (int) Math.round(hist_w / histSize.get(0, 0)[0]);
 
         Mat histImage = new Mat(hist_h, hist_w, CvType.CV_8UC3, new Scalar(0, 0, 0));
+//        Core.normalize(hist, hist, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Core.normalize(hist, hist, 0, histImage.rows(), Core.NORM_MINMAX, -1, new Mat());
-        System.out.println(hist.get(30, 0)[0]);
+        System.out.println(hist.dump());
+//        System.out.println(hist.get(30, 0)[0]);
 
         for (int i = 1; i < histSize.get(0, 0)[0]; i++) {
             Imgproc.line(histImage, new Point(bin_w * (i - 1), hist_h - Math.round(hist.get(i - 1, 0)[0])),

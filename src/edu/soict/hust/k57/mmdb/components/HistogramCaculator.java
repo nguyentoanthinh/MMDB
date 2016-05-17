@@ -43,8 +43,11 @@ public class HistogramCaculator implements Consumer<ImgEnt> {
         Mat rHist = new Mat();
 
         Imgproc.calcHist(images.subList(0, 1), channels, new Mat(), bHist, histSize, histRange, false);
+        Core.normalize(bHist, bHist, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Imgproc.calcHist(images.subList(1, 2), channels, new Mat(), gHist, histSize, histRange, false);
+        Core.normalize(gHist, gHist, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         Imgproc.calcHist(images.subList(2, 3), channels, new Mat(), rHist, histSize, histRange, false);
+        Core.normalize(rHist, rHist, 0, 1, Core.NORM_MINMAX, -1, new Mat());
         t.setbHistogram(bHist);
         t.setgHistogram(gHist);
         t.setrHistogram(rHist);
